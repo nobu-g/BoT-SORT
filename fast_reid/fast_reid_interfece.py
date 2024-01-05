@@ -60,6 +60,9 @@ class FastReIDInterface:
         self.batch_size = batch_size
 
         self.cfg = setup_cfg(config_file, ['MODEL.WEIGHTS', weights_path])
+        self.cfg.defrost()
+        self.cfg.MODEL.DEVICE = self.device
+        self.cfg.freeze()
 
         self.model = build_model(self.cfg)
         self.model.eval()

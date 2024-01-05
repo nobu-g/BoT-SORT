@@ -304,7 +304,7 @@ def main(exp, args):
 
     if args.trt:
         args.device = "gpu"
-    args.device = torch.device("cuda" if args.device == "gpu" else "cpu")
+    device = torch.device("cuda" if args.device == "gpu" else "cpu")
 
     logger.info("Args: {}".format(args))
 
@@ -315,7 +315,7 @@ def main(exp, args):
     if args.tsize is not None:
         exp.test_size = (args.tsize, args.tsize)
 
-    model = exp.get_model().to(args.device)
+    model = exp.get_model().to(device)
     logger.info("Model Summary: {}".format(get_model_info(model, exp.test_size)))
     model.eval()
 
@@ -350,7 +350,7 @@ def main(exp, args):
         trt_file = None
         decoder = None
 
-    predictor = Predictor(model, exp, trt_file, decoder, args.device, args.fp16)
+    predictor = Predictor(model, exp, trt_file, decoder, device, args.fp16)
     current_time = time.localtime()
     if args.demo == "image" or args.demo == "images":
         image_demo(predictor, vis_folder, current_time, args)
